@@ -14,7 +14,12 @@
         <div class="row">
           <div class="col-md-4">
             <%if(ad.images.length) {%>
-            <img class="img-fluid" alt="" src="<%=ad.images[0].url%>" />
+            <img
+              class="img-fluid"
+              alt=""
+              src="<%=ad.images[0].url%>"
+              height="400px"
+            />
             <% }else {%>
             <img class="img-fluid" alt="" src="/Images/no-image.png" />
             <% } %>
