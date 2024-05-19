@@ -47,9 +47,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   mongoSanitize({
     replaceWith: "_",
-  })
+  }),
 );
-const secret = process.env.SECRET ;
+const secret = process.env.SECRET;
 
 const store = new MongoDBStore({
   url: dbUrl,
@@ -109,7 +109,7 @@ app.use(
       imgSrc: ["'self'", "blob:", "data:", ClodinaryUrl],
       fontSrc: ["'self'", ...fontSrcUrls],
     },
-  })
+  }),
 );
 
 app.use(passport.initialize());
