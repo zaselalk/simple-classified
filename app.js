@@ -17,8 +17,13 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const userRoutes = require("./routes/users");
 const adsRoute = require("./routes/ads");
-
 const MongoDBStore = require("connect-mongo")(session);
+const RateLimit = require("express-rate-limit");
+
+const rateLimiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/classified";
 
@@ -36,18 +41,17 @@ db.once("open", () => {
 });
 
 const app = express();
-
+app.use(rateLimiter);
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   mongoSanitize({
     replaceWith: "_",
-  }),
+  })
 );
 const secret = process.env.SECRET;
 
@@ -109,7 +113,7 @@ app.use(
       imgSrc: ["'self'", "blob:", "data:", ClodinaryUrl],
       fontSrc: ["'self'", ...fontSrcUrls],
     },
-  }),
+  })
 );
 
 app.use(passport.initialize());
