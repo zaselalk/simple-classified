@@ -18,7 +18,7 @@
     "dotenv": "^8.2.0",
     "ejs": "^3.1.10",
     "ejs-mate": "^3.0.0",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "express-mongo-sanitize": "^2.0.0",
     "express-rate-limit": "^7.4.0",
     "express-session": "^1.18.1",
