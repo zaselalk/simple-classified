@@ -58,7 +58,7 @@ module.exports.updateAd = async (req, res) => {
   ad.images.push(...imgs);
   await ad.save();
   if (req.body.deleteImages) {
-    for (let filename of req.body.deleteImages) {
+    for (const filename of req.body.deleteImages) {
       await cloudinary.uploader.destroy(filename);
     }
     await ad.updateOne({
