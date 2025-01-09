@@ -19,6 +19,7 @@ const userRoutes = require("./routes/users");
 const adsRoute = require("./routes/ads");
 const MongoDBStore = require("connect-mongo")(session);
 const RateLimit = require("express-rate-limit");
+const lusca = require("lusca");
 
 const rateLimiter = RateLimit({
   windowMs: 15 * 60 * 1000,
@@ -80,6 +81,7 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
+app.use(lusca.csrf());
 app.use(flash());
 app.use(helmet());
 
