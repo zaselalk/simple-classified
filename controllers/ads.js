@@ -52,7 +52,7 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateAd = async (req, res) => {
   const { id } = req.params;
   const ad = await Ad.findByIdAndUpdate(id, {
-    ...req.body.Ad,
+    $set: req.body.Ad,
   });
   const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
   ad.images.push(...imgs);
