@@ -52,13 +52,13 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateAd = async (req, res) => {
   const { id } = req.params;
   const ad = await Ad.findByIdAndUpdate(id, {
-    ...req.body.Ad,
+    $set: req.body.Ad,
   });
   const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
   ad.images.push(...imgs);
   await ad.save();
   if (req.body.deleteImages) {
-    for (let filename of req.body.deleteImages) {
+    for (const filename of req.body.deleteImages) {
       await cloudinary.uploader.destroy(filename);
     }
     await ad.updateOne({
