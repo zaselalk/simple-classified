@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Ad = require("../models/ads");
 
 module.exports.renderRegister = (req, res) => {
   res.render("users/register");
@@ -33,7 +34,36 @@ module.exports.login = (req, res) => {
 
 module.exports.logout = (req, res) => {
   req.logout();
-  // req.session.destroy();
   req.flash("success", "Goodbye!");
   res.redirect("/ads");
+};
+
+module.exports.renderProfile = async (req, res) => {
+  const draftAds = await Ad.find({ author: req.user._id, status: "draft" });
+  const pendingAds = await Ad.find({ author: req.user._id, status: "pending" });
+  const publishedAds = await Ad.find({ author: req.user._id, status: "published" });
+  res.render("users/profile", { draftAds, pendingAds, publishedAds });
+};
+
+module.exports.renderChangePassword = (req, res) => {
+  res.render("users/changePassword");
+};
+
+module.exports.changePassword = async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  
+  if (newPassword !== confirmPassword) {
+    req.flash("error", "New passwords do not match!");
+    return res.redirect("/profile/change-password");
+  }
+
+  try {
+    const user = await User.findById(req.user._id);
+    await user.changePassword(currentPassword, newPassword);
+    req.flash("success", "Password updated successfully!");
+    res.redirect("/profile");
+  } catch (e) {
+    req.flash("error", "Failed to change password. Please check your current password.");
+    res.redirect("/profile/change-password");
+  }
 };
