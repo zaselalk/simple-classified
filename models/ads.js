@@ -19,6 +19,11 @@ const AdsSchema = new Schema(
     price: Number,
     description: String,
     location: String,
+    status: {
+      type: String,
+      enum: ["draft", "pending", "published"],
+      default: "published",
+    },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -30,7 +35,7 @@ const AdsSchema = new Schema(
       },
     ],
   },
-  opts
+  { ...opts, timestamps: true }
 );
 
 module.exports = mongoose.model("Ads", AdsSchema);
