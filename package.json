@@ -24,14 +24,15 @@
     "express-session": "^1.18.1",
     "helmet": "^4.1.1",
     "joi": "^17.2.1",
+    "lusca": "^1.7.0",
     "method-override": "^3.0.0",
     "mongoose": "^8.9.5",
     "multer": "^2.0.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "nodemon": "^3.1.10",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
-    "sanitize-html": "^2.12.1",
-    "lusca": "^1.7.0"
+    "sanitize-html": "^2.12.1"
   }
 }
