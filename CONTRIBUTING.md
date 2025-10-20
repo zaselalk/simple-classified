@@ -33,7 +33,7 @@ Simple Classified is a classified ads web application built with Node.js, Expres
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v14 or higher recommended)
+- [Node.js](https://nodejs.org/) (v18 LTS or v20 LTS recommended)
 - [MongoDB](https://www.mongodb.com/) (local installation or MongoDB Atlas)
 - [Cloudinary Account](https://cloudinary.com/invites/lpov9zyyucivvxsnalc5/dl7ux4wyyctegpw106ox?t=default)
 
@@ -160,7 +160,7 @@ When creating an issue, please include:
 
 ### JavaScript Style
 
-This project uses [Prettier](https://prettier.io/) and [StandardJS](https://standardjs.com/) for code formatting and linting. The configuration is defined in `.deepsource.toml`.
+This project is configured to use [Prettier](https://prettier.io/) and [StandardJS](https://standardjs.com/) for code formatting and linting via DeepSource. While local linting tools are not currently configured in the repository, contributors should follow these style guidelines:
 
 **Key Guidelines:**
 
