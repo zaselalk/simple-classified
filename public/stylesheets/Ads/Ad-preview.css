@@ -2,3 +2,31 @@
   width: "190px";
   height: "90px";
 }
+
+/* --- Ad Show Page Enhancements --- */
+.ad-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 20px 0;
+  color: #333;
+}
+
+.price-highlight {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #28a745;
+}
+
+.seller-details {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.seller-details h6 {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
