@@ -30,6 +30,7 @@ module.exports.AdSchema = Joi.object({
     price: Joi.number().required().min(0),
     location: Joi.string().required().escapeHTML(),
     description: Joi.string().required().escapeHTML(),
+    status: Joi.string().valid('draft', 'pending', 'published'),
   }).required(),
   deleteImages: Joi.array(),
 });

@@ -1,0 +1,134 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">My Profile</h2>
+                    <hr>
+                    <div class="mb-3">
+                        <strong>Username:</strong> <%= currentUser.username %>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong> <%= currentUser.email %>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Total Ads:</strong> <%= draftAds.length + pendingAds.length + publishedAds.length %>
+                    </div>
+                    <a href="/profile/change-password" class="btn btn-primary">Change Password</a>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">My Ads</h4>
+                    
+                    <ul class="nav nav-tabs" id="adsTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="published-tab" data-toggle="tab" href="#published" role="tab">
+                                Published <span class="badge badge-success"><%= publishedAds.length %></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab">
+                                Pending <span class="badge badge-warning"><%= pendingAds.length %></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="draft-tab" data-toggle="tab" href="#draft" role="tab">
+                                Draft <span class="badge badge-secondary"><%= draftAds.length %></span>
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="adsTabContent">
+                        <div class="tab-pane fade show active" id="published" role="tabpanel">
+                            <div class="mt-3">
+                                <% if(publishedAds.length === 0) { %>
+                                    <p class="text-muted">No published ads yet.</p>
+                                <% } else { %>
+                                    <% publishedAds.forEach(ad => { %>
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <h5><%= ad.title %></h5>
+                                                        <p class="text-muted mb-0">$<%= ad.price %> - <%= ad.location %></p>
+                                                    </div>
+                                                    <div class="col-md-3 text-right">
+                                                        <a href="/ads/<%= ad._id %>" class="btn btn-sm btn-info">View</a>
+                                                        <a href="/ads/<%= ad._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="pending" role="tabpanel">
+                            <div class="mt-3">
+                                <% if(pendingAds.length === 0) { %>
+                                    <p class="text-muted">No pending ads.</p>
+                                <% } else { %>
+                                    <% pendingAds.forEach(ad => { %>
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <h5><%= ad.title %></h5>
+                                                        <p class="text-muted mb-0">$<%= ad.price %> - <%= ad.location %></p>
+                                                    </div>
+                                                    <div class="col-md-3 text-right">
+                                                        <a href="/ads/<%= ad._id %>" class="btn btn-sm btn-info">View</a>
+                                                        <a href="/ads/<%= ad._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="draft" role="tabpanel">
+                            <div class="mt-3">
+                                <% if(draftAds.length === 0) { %>
+                                    <p class="text-muted">No draft ads.</p>
+                                <% } else { %>
+                                    <% draftAds.forEach(ad => { %>
+                                        <div class="card mb-2">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <h5><%= ad.title %></h5>
+                                                        <p class="text-muted mb-0">$<%= ad.price %> - <%= ad.location %></p>
+                                                    </div>
+                                                    <div class="col-md-3 text-right">
+                                                        <a href="/ads/<%= ad._id %>" class="btn btn-sm btn-info">View</a>
+                                                        <a href="/ads/<%= ad._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#adsTabs a').on('click', function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    })
+</script>
