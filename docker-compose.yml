@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:7.0
+    container_name: simple-classified-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: classified
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - classified-network
+
+  # Node.js application service
+  app:
+    build: .
+    container_name: simple-classified-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DB_URL: mongodb://classifieduser:userpassword123@mongodb:27017/classified
+      SECRET: your-super-secret-key-change-this-in-production
+      PORT: 3000
+      # Add your Cloudinary credentials here
+      CLOUDINARY_CLOUD_NAME: your_cloudinary_cloud_name
+      CLOUDINARY_KEY: your_cloudinary_key
+      CLOUDINARY_SECRET: your_cloudinary_secret
+    depends_on:
+      - mongodb
+    networks:
+      - classified-network
+    volumes:
+      - ./public:/app/public
+
+networks:
+  classified-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
