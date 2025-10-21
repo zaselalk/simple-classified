@@ -30,9 +30,7 @@ const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/classified";
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
-  useCreateIndex: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
 });
 
 const db = mongoose.connection;
@@ -52,7 +50,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   mongoSanitize({
     replaceWith: "_",
-  }),
+  })
 );
 const secret = process.env.SECRET;
 
@@ -115,7 +113,7 @@ app.use(
       imgSrc: ["'self'", "blob:", "data:", ClodinaryUrl],
       fontSrc: ["'self'", ...fontSrcUrls],
     },
-  }),
+  })
 );
 
 app.use(passport.initialize());
