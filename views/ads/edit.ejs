@@ -67,6 +67,15 @@
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
+        <label class="form-label" for="status">Status</label>
+        <select class="form-control" id="status" name="Ad[status]" required>
+          <option value="published" <%= ad.status === 'published' ? 'selected' : '' %>>Published</option>
+          <option value="pending" <%= ad.status === 'pending' ? 'selected' : '' %>>Pending</option>
+          <option value="draft" <%= ad.status === 'draft' ? 'selected' : '' %>>Draft</option>
+        </select>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-3">
         <div class="form-file custom-file">
           <input
             type="file"

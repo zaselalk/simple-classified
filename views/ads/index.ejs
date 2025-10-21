@@ -1,58 +1,31 @@
 <% layout('layouts/boilerplate')%>
+<h1>All Ads</h1>
+<p>
+  <a href="/ads/new">Create a New Ad</a>
+</p>
 
-<head>
-  <link rel="stylesheet" href="/stylesheets/Ads/Ad-preview.css" />
-</head>
-
-<div class="container">
-  <h1>All Ads</h1>
-
-  <div class="row">
-    <div class="col-md-8">
-      <% for (let ad of ads){%>
-      <div class="ad-preview mb-3">
-        <div class="row">
-          <div class="col-md-4">
-            <%if(ad.images.length) {%>
-            <img
-              class="img-fluid"
-              style="height: 150px"
-              src="<%=ad.images[0].url%>"
-            />
-            <% }else {%>
-            <img class="img-fluid" alt="" src="/Images/no-image.png" />
-            <% } %>
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title"><%= ad.title %></h5>
-
-              <p class="card-text">$<%= ad.price %></p>
-              <p class="card-text">
-                <small class="text-muted"><%= ad.location%></small>
-              </p>
-              <a class="btn btn-primary" href="/ads/<%=ad._id%>"
-                >More Details
-              </a>
-            </div>
-          </div>
-        </div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <% for (let ad of ads){%>
+  <div class="col">
+    <div class="card h-100">
+      <% if(ad.images.length) { %>
+      <img class="card-img-top" alt="" src="<%=ad.images[0].url%>" />
+      <% }else {%>
+      <img
+        class="card-img-top"
+        alt=""
+        src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png"
+      />
+      <% } %>
+      <div class="card-body">
+        <h5 class="card-title"><%= ad.title %></h5>
+        <p class="card-text text-muted"><%= ad.location%></p>
+        <a class="btn btn-primary" href="/ads/<%=ad._id%>">View <%=ad.title%></a>
       </div>
-      <hr />
-      <% }%>
-    </div>
-    <div class="col-md-4">
-      <div class="card" style="width: 18rem">
-        <div class="card-body">
-          <h5 class="card-title">Post Your Ad</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Totally Free! No Limit.</h6>
-          <p class="card-text">
-            Simple Classified is <b>Totally Free! No Limit</b> Classified Ad
-            plaform.
-          </p>
-          <a href="/ads/new" class="card-link">Post Now</a>
-        </div>
+      <div class="card-footer">
+        <small class="text-muted">$<%= ad.price %></small>
       </div>
     </div>
   </div>
+  <% }%>
 </div>

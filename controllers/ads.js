@@ -2,7 +2,7 @@ const Ad = require("../models/ads");
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
-  const ads = await Ad.find({}).populate("popupText");
+  const ads = await Ad.find({ status: "published" }).populate("popupText");
   res.render("ads/index", { ads });
 };
 
@@ -17,6 +17,9 @@ module.exports.createAd = async (req, res, next) => {
     filename: f.filename,
   }));
   ad.author = req.user._id;
+  if (!ad.status) {
+    ad.status = "published";
+  }
   await ad.save();
   req.flash("success", "Successfully made a new ad!");
   res.redirect(`/ads/${ad._id}`);
