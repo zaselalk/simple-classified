@@ -1,5 +1,73 @@
 <% layout('layouts/boilerplate')%>
-<h1>All Ads</h1>
+<div class="container mb-4">
+  <h1>All Ads</h1>
+
+  <div class="mb-3">
+    <h5>Filter by Category:</h5>
+    <div class="btn-group" role="group" aria-label="Category filter">
+      <a
+        href="/ads"
+        class="btn <%= selectedCategory === 'all' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >All</a
+      >
+      <a
+        href="/ads?category=Electronics"
+        class="btn <%= selectedCategory === 'Electronics' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Electronics</a
+      >
+      <a
+        href="/ads?category=Vehicles"
+        class="btn <%= selectedCategory === 'Vehicles' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Vehicles</a
+      >
+      <a
+        href="/ads?category=Real%20Estate"
+        class="btn <%= selectedCategory === 'Real Estate' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Real Estate</a
+      >
+      <a
+        href="/ads?category=Furniture"
+        class="btn <%= selectedCategory === 'Furniture' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Furniture</a
+      >
+      <a
+        href="/ads?category=Clothing"
+        class="btn <%= selectedCategory === 'Clothing' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Clothing</a
+      >
+      <a
+        href="/ads?category=Books"
+        class="btn <%= selectedCategory === 'Books' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Books</a
+      >
+      <a
+        href="/ads?category=Sports%20%26%20Recreation"
+        class="btn <%= selectedCategory === 'Sports & Recreation' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Sports</a
+      >
+      <a
+        href="/ads?category=Home%20%26%20Garden"
+        class="btn <%= selectedCategory === 'Home & Garden' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Home & Garden</a
+      >
+      <a
+        href="/ads?category=Services"
+        class="btn <%= selectedCategory === 'Services' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Services</a
+      >
+      <a
+        href="/ads?category=Jobs"
+        class="btn <%= selectedCategory === 'Jobs' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Jobs</a
+      >
+      <a
+        href="/ads?category=Other"
+        class="btn <%= selectedCategory === 'Other' ? 'btn-primary' : 'btn-outline-primary' %>"
+        >Other</a
+      >
+    </div>
+  </div>
+</div>
 <p>
   <a href="/ads/new">Create a New Ad</a>
 </p>
@@ -20,7 +88,11 @@
       <div class="card-body">
         <h5 class="card-title"><%= ad.title %></h5>
         <p class="card-text text-muted"><%= ad.location%></p>
-        <a class="btn btn-primary" href="/ads/<%=ad._id%>">View <%=ad.title%></a>
+        <span class="badge bg-secondary mb-2"><%= ad.category %></span>
+        <br />
+        <a class="btn btn-primary" href="/ads/<%=ad._id%>"
+          >View <%=ad.title%></a
+        >
       </div>
       <div class="card-footer">
         <small class="text-muted">$<%= ad.price %></small>

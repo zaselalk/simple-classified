@@ -19,6 +19,23 @@ const AdsSchema = new Schema(
     price: Number,
     description: String,
     location: String,
+    category: {
+      type: String,
+      enum: [
+        "Electronics",
+        "Vehicles",
+        "Real Estate",
+        "Furniture",
+        "Clothing",
+        "Books",
+        "Sports & Recreation",
+        "Home & Garden",
+        "Services",
+        "Jobs",
+        "Other",
+      ],
+      required: true,
+    },
     status: {
       type: String,
       enum: ["draft", "pending", "published"],
