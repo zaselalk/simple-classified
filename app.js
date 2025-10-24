@@ -79,7 +79,6 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
-app.use(lusca.csrf());
 app.use(flash());
 app.use(helmet());
 
@@ -127,6 +126,23 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+
+  // Make CSRF token available globally - handle cases where it might not be available
+  res.locals.csrfToken = null; // Default to null
+
+  // Only try to get CSRF token if we're not on auth routes
+  if (
+    req.path !== "/login" &&
+    req.path !== "/register" &&
+    req.path !== "/logout"
+  ) {
+    try {
+      res.locals.csrfToken = req.csrfToken();
+    } catch (err) {
+      // CSRF token not available, that's okay for some routes
+      res.locals.csrfToken = null;
+    }
+  }
   next();
 });
 

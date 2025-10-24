@@ -9,6 +9,9 @@
       class="validated-form"
       enctype="multipart/form-data"
     >
+    <% if (csrfToken) { %>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <% } %>
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -35,6 +38,25 @@
       </div>
 
       <div class="mb-3">
+        <label class="form-label" for="category">Category</label>
+        <select class="form-control" id="category" name="Ad[category]" required>
+          <option value="">Select a category</option>
+          <option value="Electronics" <%= ad.category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+          <option value="Vehicles" <%= ad.category === 'Vehicles' ? 'selected' : '' %>>Vehicles</option>
+          <option value="Real Estate" <%= ad.category === 'Real Estate' ? 'selected' : '' %>>Real Estate</option>
+          <option value="Furniture" <%= ad.category === 'Furniture' ? 'selected' : '' %>>Furniture</option>
+          <option value="Clothing" <%= ad.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+          <option value="Books" <%= ad.category === 'Books' ? 'selected' : '' %>>Books</option>
+          <option value="Sports & Recreation" <%= ad.category === 'Sports & Recreation' ? 'selected' : '' %>>Sports & Recreation</option>
+          <option value="Home & Garden" <%= ad.category === 'Home & Garden' ? 'selected' : '' %>>Home & Garden</option>
+          <option value="Services" <%= ad.category === 'Services' ? 'selected' : '' %>>Services</option>
+          <option value="Jobs" <%= ad.category === 'Jobs' ? 'selected' : '' %>>Jobs</option>
+          <option value="Other" <%= ad.category === 'Other' ? 'selected' : '' %>>Other</option>
+        </select>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+
+      <div class="mb-3">
         <label class="form-label" for="price">ad Price</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">$</span>
@@ -48,7 +70,7 @@
             name="Ad[price]"
             value="<%=ad.price %>"
             required
-          />\
+          />
           <div class="valid-feedback">Looks good!</div>
         </div>
       </div>
@@ -61,9 +83,7 @@
           id="description"
           name="Ad[description]"
           required
-        >
-<%= ad.description%></textarea
-        >
+        ><%= ad.description%></textarea>
         <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
