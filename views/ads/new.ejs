@@ -3,7 +3,7 @@
   <h1 class="text-center">Post New Ad</h1>
   <div class="col-md-6 offset-md-3">
     <form
-      action="/ads"
+      action="/ads<% if (csrfToken) { %>?_csrf=<%= encodeURIComponent(csrfToken) %><% } %>"
       method="POST"
       novalidate
       class="validated-form"

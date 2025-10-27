@@ -71,9 +71,7 @@ module.exports.updateAd = async (req, res) => {
     }
 
     // Update the ad with new data
-    await Ad.findByIdAndUpdate(id, {
-      $set: req.body.Ad,
-    });
+    Object.assign(ad, req.body.Ad);
 
     // Handle new image uploads
     if (req.files && req.files.length > 0) {
@@ -81,9 +79,7 @@ module.exports.updateAd = async (req, res) => {
         url: f.path,
         filename: f.filename,
       }));
-      await Ad.findByIdAndUpdate(id, {
-        $push: { images: { $each: imgs } },
-      });
+      ad.images.push(...imgs);
     }
 
     // Handle image deletions
@@ -91,10 +87,13 @@ module.exports.updateAd = async (req, res) => {
       for (const filename of req.body.deleteImages) {
         await cloudinary.uploader.destroy(filename);
       }
-      await Ad.findByIdAndUpdate(id, {
-        $pull: { images: { filename: { $in: req.body.deleteImages } } },
-      });
+      ad.images = ad.images.filter(
+        (img) => !req.body.deleteImages.includes(img.filename)
+      );
     }
+
+    // Save the updated ad
+    await ad.save();
 
     req.flash("success", "Successfully updated Ad!");
     res.redirect(`/ads/${id}`);
