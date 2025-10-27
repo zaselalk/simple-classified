@@ -32,11 +32,18 @@ module.exports.login = (req, res) => {
   res.redirect(redirectUrl);
 };
 
-module.exports.logout = (req, res) => {
-  req.logout();
-  req.flash("success", "Goodbye!");
-  res.redirect("/ads");
+// 
+//modified logout function
+module.exports.logout = (req, res, next) => {
+  req.logout(function (err) {
+    if (err) { 
+      return next(err); 
+    }
+    req.flash("success", "Goodbye!");
+    res.redirect("/ads");
+  });
 };
+
 
 module.exports.renderProfile = async (req, res) => {
   const draftAds = await Ad.find({ author: req.user._id, status: "draft" });
