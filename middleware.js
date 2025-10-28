@@ -1,6 +1,7 @@
 const { AdSchema } = require("./schemas.js");
 const ExpressError = require("./utils/ExpressError");
-const Campground = require("./models/ads");
+const Ad = require("./models/ads");
+const { UserSchema } = require("./schemas.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -29,8 +30,13 @@ module.exports.validateAd = (req, res, next) => {
 
 module.exports.isAuthor = async (req, res, next) => {
   const { id } = req.params;
-  const campground = await Campground.findById(id);
-  if (!campground.author.equals(req.user._id)) {
+  const ad = await Ad.findById(id);
+  if (!ad) {
+    req.flash("error", "Cannot find that ad!");
+    return res.redirect("/ads");
+  }
+  // Ensure author exists and matches
+  if (!ad.author || !ad.author.equals(req.user._id)) {
     req.flash("error", "You do not have permission to do that!");
     return res.redirect(`/ads/${id}`);
   }

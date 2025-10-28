@@ -19,7 +19,9 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createAd = async (req, res, next) => {
   const ad = new Ad(req.body.Ad);
-  ad.images = req.files.map((f) => ({
+  // Safely map uploaded files (guard if no files were uploaded)
+  const files = Array.isArray(req.files) ? req.files : [];
+  ad.images = files.map((f) => ({
     url: f.path,
     filename: f.filename,
   }));
