@@ -79,43 +79,10 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
-app.use(lusca.csrf());
 app.use(flash());
 app.use(helmet());
 
-const scriptSrcUrls = [
-  "https://stackpath.bootstrapcdn.com",
-  "https://kit.fontawesome.com",
-  "https://cdnjs.cloudflare.com",
-  "https://cdn.jsdelivr.net",
-];
-const styleSrcUrls = [
-  "https://kit-free.fontawesome.com",
-  "https://stackpath.bootstrapcdn.com",
-  "https://fonts.googleapis.com",
-  "https://use.fontawesome.com",
-];
-
-const fontSrcUrls = [];
-
-const ClodinaryUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/`;
-
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [],
-      connectSrc: ["'self'"],
-      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-      workerSrc: ["'self'", "blob:"],
-      childSrc: ["blob:"],
-      objectSrc: [],
-      imgSrc: ["'self'", "blob:", "data:", ClodinaryUrl],
-      fontSrc: ["'self'", ...fontSrcUrls],
-    },
-  })
-);
-
+// Initialize Passport before any middleware that relies on req.user
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -123,12 +90,101 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Promote _csrf from query to header (helps multipart forms) before CSRF checks
 app.use((req, res, next) => {
+  if (req.query && req.query._csrf && !req.headers["x-csrf-token"]) {
+    req.headers["x-csrf-token"] = req.query._csrf;
+  }
+  next();
+});
+
+// Configure CSRF protection globally but only validate on specific routes
+app.use(
+  lusca.csrf({
+    cookie: false,
+    ignoreMethods: ["GET", "HEAD", "OPTIONS"],
+    sessionKey: "session",
+  })
+);
+
+// Add CSRF token to locals (only for GET to avoid token churn on POST)
+app.use((req, res, next) => {
+  try {
+    if (req.method === "GET" && req.accepts("html")) {
+      res.locals.csrfToken = req.csrfToken();
+    }
+  } catch (err) {
+    res.locals.csrfToken = null;
+  }
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
+
+const ClodinaryUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/`;
+
+// (removed duplicate passport initialization here; it's already set up earlier)
+
+// Apply CSP configuration right before routes to ensure it's not overridden
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: [
+          "'self'",
+          "https://stackpath.bootstrapcdn.com",
+          "https://cdn.jsdelivr.net",
+        ],
+        scriptSrc: [
+          "'unsafe-inline'",
+          "'self'",
+          "https://stackpath.bootstrapcdn.com",
+          "https://kit.fontawesome.com",
+          "https://cdnjs.cloudflare.com",
+          "https://cdn.jsdelivr.net",
+        ],
+        scriptSrcElem: [
+          "'unsafe-inline'",
+          "'self'",
+          "https://stackpath.bootstrapcdn.com",
+          "https://kit.fontawesome.com",
+          "https://cdnjs.cloudflare.com",
+          "https://cdn.jsdelivr.net",
+        ],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://kit-free.fontawesome.com",
+          "https://stackpath.bootstrapcdn.com",
+          "https://fonts.googleapis.com",
+          "https://use.fontawesome.com",
+        ],
+        styleSrcElem: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://kit-free.fontawesome.com",
+          "https://stackpath.bootstrapcdn.com",
+          "https://fonts.googleapis.com",
+          "https://use.fontawesome.com",
+        ],
+        imgSrc: [
+          "'self'",
+          "blob:",
+          "data:",
+          "https://res.cloudinary.com/",
+          ClodinaryUrl,
+          "https://images.unsplash.com",
+        ],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        workerSrc: ["'self'", "blob:"],
+        childSrc: ["blob:"],
+        objectSrc: [],
+      },
+    },
+  })
+);
 
 app.use("/", userRoutes);
 app.use("/ads", adsRoute);
