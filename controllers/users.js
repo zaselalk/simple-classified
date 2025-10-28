@@ -32,10 +32,13 @@ module.exports.login = (req, res) => {
   res.redirect(redirectUrl);
 };
 
-module.exports.logout = (req, res) => {
-  req.logout();
-  req.flash("success", "Goodbye!");
-  res.redirect("/ads");
+module.exports.logout = (req, res, next) => {
+  // In newer passport versions logout may be async and accept a callback
+  req.logout(function (err) {
+    if (err) return next(err);
+    req.flash("success", "Goodbye!");
+    res.redirect("/ads");
+  });
 };
 
 module.exports.renderProfile = async (req, res) => {

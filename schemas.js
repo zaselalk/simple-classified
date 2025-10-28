@@ -34,3 +34,9 @@ module.exports.AdSchema = Joi.object({
   }).required(),
   deleteImages: Joi.array(),
 });
+
+module.exports.UserSchema = Joi.object({
+  email: Joi.string().required().email().escapeHTML(),
+  username: Joi.string().required().escapeHTML(),
+  password: Joi.string().required().min(6),
+});

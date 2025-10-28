@@ -28,10 +28,7 @@ const rateLimiter = RateLimit({
 
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/classified";
 
-mongoose.connect(dbUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -52,7 +49,8 @@ app.use(
     replaceWith: "_",
   })
 );
-const secret = process.env.SECRET;
+
+const secret = process.env.SECRET || "Your_different_secret";
 
 const store = new MongoDBStore({
   url: dbUrl,

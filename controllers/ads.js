@@ -12,7 +12,9 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createAd = async (req, res, next) => {
   const ad = new Ad(req.body.Ad);
-  ad.images = req.files.map((f) => ({
+  // Safely map uploaded files (guard if no files were uploaded)
+  const files = Array.isArray(req.files) ? req.files : [];
+  ad.images = files.map((f) => ({
     url: f.path,
     filename: f.filename,
   }));
@@ -57,12 +59,19 @@ module.exports.updateAd = async (req, res) => {
   const ad = await Ad.findByIdAndUpdate(id, {
     $set: req.body.Ad,
   });
-  const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+  const files = Array.isArray(req.files) ? req.files : [];
+  const imgs = files.map((f) => ({ url: f.path, filename: f.filename }));
+  if (!Array.isArray(ad.images)) ad.images = [];
   ad.images.push(...imgs);
   await ad.save();
   if (req.body.deleteImages) {
+    // Attempt to delete each image from Cloudinary but don't fail the whole request if one fails
     for (const filename of req.body.deleteImages) {
-      await cloudinary.uploader.destroy(filename);
+      try {
+        await cloudinary.uploader.destroy(filename);
+      } catch (e) {
+        console.error("Cloudinary deletion failed for", filename, e);
+      }
     }
     await ad.updateOne({
       $pull: { images: { filename: { $in: req.body.deleteImages } } },
