@@ -79,6 +79,7 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
+//app.use(lusca.csrf());
 app.use(flash());
 app.use(helmet());
 
