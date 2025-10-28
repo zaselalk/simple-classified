@@ -13,17 +13,13 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 module.exports.validateAd = (req, res, next) => {
-  const { error } = AdSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
-  } else {
-    next();
-  }
-};
-
-module.exports.validateUser = (req, res, next) => {
-  const { error } = UserSchema.validate(req.body);
+  // Validate only the expected shape; exclude meta fields like _csrf, _method
+  const payloadToValidate = {
+    Ad: req.body && req.body.Ad,
+    deleteImages: req.body && req.body.deleteImages,
+  };
+  const { error } = AdSchema.validate(payloadToValidate);
+  console.log(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);

@@ -32,19 +32,26 @@ module.exports.login = (req, res) => {
   res.redirect(redirectUrl);
 };
 
+// 
+//modified logout function
 module.exports.logout = (req, res, next) => {
-  // In newer passport versions logout may be async and accept a callback
   req.logout(function (err) {
-    if (err) return next(err);
+    if (err) { 
+      return next(err); 
+    }
     req.flash("success", "Goodbye!");
     res.redirect("/ads");
   });
 };
 
+
 module.exports.renderProfile = async (req, res) => {
   const draftAds = await Ad.find({ author: req.user._id, status: "draft" });
   const pendingAds = await Ad.find({ author: req.user._id, status: "pending" });
-  const publishedAds = await Ad.find({ author: req.user._id, status: "published" });
+  const publishedAds = await Ad.find({
+    author: req.user._id,
+    status: "published",
+  });
   res.render("users/profile", { draftAds, pendingAds, publishedAds });
 };
 
@@ -54,7 +61,7 @@ module.exports.renderChangePassword = (req, res) => {
 
 module.exports.changePassword = async (req, res) => {
   const { currentPassword, newPassword, confirmPassword } = req.body;
-  
+
   if (newPassword !== confirmPassword) {
     req.flash("error", "New passwords do not match!");
     return res.redirect("/profile/change-password");
@@ -66,7 +73,10 @@ module.exports.changePassword = async (req, res) => {
     req.flash("success", "Password updated successfully!");
     res.redirect("/profile");
   } catch (e) {
-    req.flash("error", "Failed to change password. Please check your current password.");
+    req.flash(
+      "error",
+      "Failed to change password. Please check your current password."
+    );
     res.redirect("/profile/change-password");
   }
 };

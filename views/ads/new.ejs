@@ -3,12 +3,15 @@
   <h1 class="text-center">Post New Ad</h1>
   <div class="col-md-6 offset-md-3">
     <form
-      action="/ads"
+      action="/ads<% if (csrfToken) { %>?_csrf=<%= encodeURIComponent(csrfToken) %><% } %>"
       method="POST"
       novalidate
       class="validated-form"
       enctype="multipart/form-data"
     >
+      <% if (csrfToken) { %>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+      <% } %>
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -29,6 +32,25 @@
           name="Ad[location]"
           required
         />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="category">Category</label>
+        <select class="form-control" id="category" name="Ad[category]" required>
+          <option value="">Select a category</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Vehicles">Vehicles</option>
+          <option value="Real Estate">Real Estate</option>
+          <option value="Furniture">Furniture</option>
+          <option value="Clothing">Clothing</option>
+          <option value="Books">Books</option>
+          <option value="Sports & Recreation">Sports & Recreation</option>
+          <option value="Home & Garden">Home & Garden</option>
+          <option value="Services">Services</option>
+          <option value="Jobs">Jobs</option>
+          <option value="Other">Other</option>
+        </select>
         <div class="valid-feedback">Looks good!</div>
       </div>
 
