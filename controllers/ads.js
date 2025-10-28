@@ -2,8 +2,15 @@ const Ad = require("../models/ads");
 const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
-  const ads = await Ad.find({ status: "published" }).populate("popupText");
-  res.render("ads/index", { ads });
+  const { category } = req.query;
+  let query = { status: "published" };
+
+  if (category && category !== "all") {
+    query.category = category;
+  }
+
+  const ads = await Ad.find(query).populate("author");
+  res.render("ads/index", { ads, selectedCategory: category || "all" });
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -54,22 +61,47 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateAd = async (req, res) => {
   const { id } = req.params;
-  const ad = await Ad.findByIdAndUpdate(id, {
-    $set: req.body.Ad,
-  });
-  const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-  ad.images.push(...imgs);
-  await ad.save();
-  if (req.body.deleteImages) {
-    for (const filename of req.body.deleteImages) {
-      await cloudinary.uploader.destroy(filename);
+
+  try {
+    // Find the ad first
+    const ad = await Ad.findById(id);
+    if (!ad) {
+      req.flash("error", "Cannot find that Ad!");
+      return res.redirect("/ads");
     }
-    await ad.updateOne({
-      $pull: { images: { filename: { $in: req.body.deleteImages } } },
-    });
+
+    // Update the ad with new data
+    Object.assign(ad, req.body.Ad);
+
+    // Handle new image uploads
+    if (req.files && req.files.length > 0) {
+      const imgs = req.files.map((f) => ({
+        url: f.path,
+        filename: f.filename,
+      }));
+      ad.images.push(...imgs);
+    }
+
+    // Handle image deletions
+    if (req.body.deleteImages) {
+      for (const filename of req.body.deleteImages) {
+        await cloudinary.uploader.destroy(filename);
+      }
+      ad.images = ad.images.filter(
+        (img) => !req.body.deleteImages.includes(img.filename)
+      );
+    }
+
+    // Save the updated ad
+    await ad.save();
+
+    req.flash("success", "Successfully updated Ad!");
+    res.redirect(`/ads/${id}`);
+  } catch (error) {
+    console.error("Error updating ad:", error);
+    req.flash("error", "Error updating ad. Please try again.");
+    res.redirect(`/ads/${id}/edit`);
   }
-  req.flash("success", "Successfully updated Ad!");
-  res.redirect(`/ads/${ad._id}`);
 };
 
 module.exports.deleteAd = async (req, res) => {
