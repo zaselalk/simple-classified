@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Simple Classified</h1>
    <img
-      src="https://pbs.twimg.com/media/FM4wCJ0VEAAsOT0?format=jpg&name=large"
+      src="./document/cover.png"
       alt="Simple Classified Landing Page"/>
 </div>
 
