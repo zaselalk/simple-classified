@@ -46,8 +46,76 @@ body {
   text-shadow: none;
 }
 
+/* Features Section */
+.features-section {
+  padding: 2rem 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  backdrop-filter: blur(5px);
+}
+
+.features-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+  border-radius: 0.5rem;
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.feature-icon {
+  margin-bottom: 1rem;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feature-icon svg {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.feature-description {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
 @media only screen and (max-width: 600px) {
   .btn-sec-home {
     margin-top: 10px;
+  }
+
+  .features-title {
+    font-size: 1.5rem;
+  }
+
+  .feature-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .features-section {
+    padding: 1.5rem 0;
   }
 }
