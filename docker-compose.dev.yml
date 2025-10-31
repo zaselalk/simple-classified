@@ -35,12 +35,17 @@ services:
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_KEY: ${CLOUDINARY_KEY}
       CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
+      CHOKIDAR_USEPOLLING: "true" # Fix for Windows file watching
+      WATCHPACK_POLLING: "true"
     depends_on:
       - mongodb
     networks:
       - classified-network
     volumes:
-      - ./public:/app/public
+      - ./:/app # Mount source code
+      - /app/node_modules # Prevent overwriting node_modules
+      - /app/.npm # Prevent npm cache issues
+    command: npm run dev # Override CMD to use dev script
 
 networks:
   classified-network:
