@@ -5,8 +5,8 @@ module.exports.index = async (req, res) => {
   const { category } = req.query;
   let query = { status: "published" };
 
-  if (category && category !== "all") {
-    query.category = category;
+  if (typeof category === "string" && category !== "all") {
+    query.category = { $eq: category };
   }
 
   const ads = await Ad.find(query).populate("author");
