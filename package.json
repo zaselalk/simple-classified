@@ -23,7 +23,7 @@
     "express-rate-limit": "^7.4.0",
     "express-session": "^1.18.2",
     "helmet": "^4.1.1",
-    "joi": "^17.2.1",
+    "joi": "^18.2.1",
     "lusca": "^1.7.0",
     "method-override": "^3.0.0",
     "mongoose": "^6.13.6",
