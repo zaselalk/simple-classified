@@ -1,3 +1,5 @@
+
+
 <div align="center">
   <h1>Simple Classified</h1>
    <img
@@ -33,9 +35,9 @@
 - Copy rename .env.example file as .env
 - Complete following deatils on renamed file
   - SECRET=Some Random Secret
-  - CLOUDINARY_CLOUD_NAME= Clodinary cloud name
-  - CLOUDINARY_KEY= Clodinary API key
-  - CLOUDINARY_SECRET= Clodinary API secret
+  - CLOUDINARY_CLOUD_NAME= Cloudinary cloud name
+  - CLOUDINARY_KEY= Cloudinary API key
+  - CLOUDINARY_SECRET= Cloudinary API secret
   - DB_URL = Mongo DB url - Default : mongodb://localhost:27017/classified
 - Install dependencies with `npm install`
 - start application with `npm run dev` or `npm start`
